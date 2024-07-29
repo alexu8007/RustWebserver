@@ -2,48 +2,83 @@ use rouille::{Response, Server, router};
 use std::fs::File;
 use std::io::Read;
 
-pub fn main(){
 
+
+
+pub fn main() {
     let server = Server::new("localhost:9091", move |request| {
-    router!(request,
-        (GET) (/) => {
-            Response::text("hello world")
-        },
-        (GET) (/newEndpoint) => {
-            Response::text("different endpoint")
-        },
-        (GET) (/download) => {
-            let file_path = "C:\\Users\\Alex\\firstProgram\\Cargo.toml"; 
-            println!("Attempting to open file: {}", file_path);
-            match File::open(file_path) {
-                Ok(mut file) => {
-                    let mut file_content = Vec::new();
-                    match file.read_to_end(&mut file_content) {
-                        Ok(_) => {
-                            println!("File read successfully");
-                            Response::from_data("application/octet-stream", file_content)
-                                .with_additional_header("Content-Disposition", "attachment; filename=\"Cargo.toml\"")
-                        },
-                        Err(e) => {
-                            println!("Failed to read file: {}", e);
-                            Response::empty_404()
-                        }
+        router!(request,
+            (GET) (/) => {
+                Response::text("default endpoint")
+            },
+            (GET) (/newEndpoint) => {
+                Response::text("different endpoint")
+            },
+            (GET) (/download) => {
+
+                let param = request.get_param("param").unwrap_or_else(|| "default".to_string());
+
+                /* 
+                let keycloak = Request::body().expect("Failed to read request body");
+
+                keycloak = parse(&keycloak).unwrap().expect("Failed to parse JSON");
+
+                if (keycloak.authenticated){
+                    let info = keycloak["loadUserInfo"];
+                    Response::text("You are authenticated")
+                    file_path = (format!*(C:\\Users\\Alex\\firstProgram\\certs\\{}", info.client_id));
+                    if (file_path.exists()){
+                        continute
+                    } else {
+                        Response::empty_404()
                     }
-                },
-                Err(e) => {
-                    println!("Failed to open file: {}", e);
-                    Response::empty_404()
                 }
+                */
+
+                let file_path = format!("C:\\Users\\Alex\\firstProgram\\{}.txt", param); 
+
+                println!("Attempting to open file: {}", file_path);
+                match File::open(file_path) {
+                    Ok(mut file) => {
+                        let mut file_content = Vec::new();
+                        match file.read_to_end(&mut file_content) {
+                            Ok(_) => {
+                                println!("File read successfully");
+                                match String::from_utf8(file_content) {
+                                    Ok(file_string) => {
+                                        Response::text(file_string)
+                                    },
+                                    Err(e) => {
+                                        println!("Failed to convert file content to string: {}", e);
+                                        Response::empty_404()
+                                    }
+                                }
+                            },
+                            Err(e) => {
+                                println!("Failed to read file: {}", e);
+                                Response::empty_404()
+                            }
+                        }
+                    },
+                    Err(e) => {
+                        println!("Failed to open file: {}", e);
+                        Response::empty_404()
+                    }
+                }
+            },
+            (POST) (/upload_creds) => {
+                let mut data = request.data().expect("Failed to read request body");
+                let mut body = String::new();
+                data.read_to_string(&mut body).expect("Failed to read body to string");
+                Response::text(format!("Received body: {}", body))
+            },
+            _ => {
+                Response::empty_404()
             }
-        },
-        _ => {
-            Response::empty_404()
-        }
-    )
-    
-}).unwrap();
+        )
+    }).unwrap();
 
-println!("Listening on {:?}", server.server_addr());
+    println!("Listening on {:?}", server.server_addr());
 
-server.run();
+    server.run();
 }
