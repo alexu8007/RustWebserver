@@ -19,16 +19,16 @@ pub fn main() {
                 let param = request.get_param("param").unwrap_or_else(|| "default".to_string());
 
                 /* 
-                let keycloak = Request::body().expect("Failed to read request body");
+                let data = Request::body().expect("Failed to read request body");
 
-                keycloak = parse(&keycloak).unwrap().expect("Failed to parse JSON");
+                keycloak = parse(&data).unwrap().expect("Failed to parse JSON");
 
                 if (keycloak.authenticated){
-                    let info = keycloak["loadUserInfo"];
+                    let client_id = keycloak["subject"];
                     Response::text("You are authenticated")
-                    file_path = (format!*(C:\\Users\\Alex\\firstProgram\\certs\\{}", info.client_id));
+                    file_path = (format!*(C:\\Users\\Alex\\firstProgram\\certificates\\{}", client_id));
                     if (file_path.exists()){
-                        continute
+                        continue
                     } else {
                         Response::empty_404()
                     }
