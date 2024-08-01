@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 json = "0.12.4"
 rouille = "3.6.2"
+postgrest = "1.0"

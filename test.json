@@ -1,0 +1,7 @@
+{
+    "cert": "",
+    "key": "",
+    "ca": "",
+    "endpoint": "https://api.example.com",
+    "client_id": "client_id"
+}
