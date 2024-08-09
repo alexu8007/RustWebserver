@@ -151,7 +151,7 @@ pub fn main() {
 
                 let param = request.get_param("param").unwrap_or_else(|| "default".to_string());
 
-                let file_path = format!("C:\\Users\\Alex\\firstProgram\\{}.txt", param); 
+                let file_path = format!("C:\\Users\\Alex\\firstProgram\\{}", param); 
 
                 /* 
 
