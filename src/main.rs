@@ -42,7 +42,8 @@ use std::io::Read;
 pub fn handle_request(file_path: &str) -> Response {
     println!("Attempting to open path: {}", file_path);
     let path = Path::new(file_path);
-
+    
+    /// Will clean this up at some point :/
     if path.is_dir() {
         let mut combined_content = String::new();
         match fs::read_dir(path) {
