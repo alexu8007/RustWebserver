@@ -1,5 +1,4 @@
 /* 
-/    Copyright: 2024 A.U.G. Signals Ltd.
 /    File: src/main.rs
 /    Description: This file is the entry point for the application. It sets up and runs the HTTP server.
 /    Created by: Alex Ungureanu
